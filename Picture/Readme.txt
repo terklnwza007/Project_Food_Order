@@ -1,1 +1,0 @@
-MMANOOPA{{.ddd}}
