@@ -71,3 +71,10 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.grid{
+  display: grid;
+  background-color: gainsboro;
+  grid-template-columns: 3fr 1fr;
+  row-gap: 20px;
+}
