@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import './pro_sty.css'; // เชื่อมต่อ CSS ไฟล์
+import './pro_sty.css'; 
 
 export default function Product() {
-    // State and Refs
+    
     const [product, setProduct] = useState([]);
     const myInputRef1 = React.createRef();
     const myInputRef2 = React.createRef();
     const myInputRef3 = React.createRef();
 
-    // useEffect for fetching data
+    
     useEffect(() => {
         console.log("request to api");
         axios.get("http://127.0.0.1:5000/products")
@@ -19,7 +19,7 @@ export default function Product() {
             });
     }, []);
 
-    // Function Handlers
+    
     const onAddProduct = () => {
         const data = {
             name: myInputRef1.current.value,
@@ -49,21 +49,29 @@ export default function Product() {
     };
 
     const onUpdate = (id) => {
-        const data = {
-            name: myInputRef1.current.value,
-            price: myInputRef2.current.value
+        const newData = {
+            name: myInputRef1.current.value || product.find(item => item._id === id).name,
+            price: myInputRef2.current.value || product.find(item => item._id === id).price,
+            image: myInputRef3.current.value || product.find(item => item._id === id).image
         };
-        const names = myInputRef1.current.value;
-        const price = myInputRef2.current.value;
-        if (names !== "" && price !== "") {
-            axios.put("http://127.0.0.1:5000/products/" + id, data)
+        const { name, price, image } = newData;
+    
+        if (name !== "" && price !== "" && image !== "") {
+            axios.put("http://127.0.0.1:5000/products/" + id, newData)
                 .then(response => {
                     setProduct(response.data);
+                })
+                .catch(error => {
+                    console.error('Error updating product:', error);
                 });
+    
             myInputRef1.current.value = "";
             myInputRef2.current.value = "";
+            myInputRef3.current.value = "";
         }
     };
+    
+    
 
     const showProducts = product.map(item => (
         <tr key={item._id}>
