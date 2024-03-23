@@ -5,6 +5,7 @@ function List_order(){
     const [meat,setMeat]=useState([])
     const [check,setCheck]=useState([])
     const [sum, setSum] = useState(0)
+    const [total, setTotal] = useState(0)
     useEffect(()=>{
         console.log("request to api")
         axios.get("http://127.0.0.1:5000/order")
@@ -14,10 +15,9 @@ function List_order(){
             console.error('Error fetching data:', error);
         })
 
-        axios.get("http://127.0.0.1:5000/sum")
+        axios.get("http://127.0.0.1:5000/total/order")
         .then(response=>{
             setSum(response.data)
-            console.log(sum)
         }).catch(error => {
             console.error('Error fetching data:', error);
         })
@@ -28,8 +28,15 @@ function List_order(){
         .then((response) => {
             setMeat(response.data);
         })
+        axios.get("http://127.0.0.1:5000/total")
+        .then(response=>{
+            setSum(response.data)
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+        })
+        window.location.reload();
     }
-    const show_meat = meat.map((item) => {
+    const show_order = meat.map((item) => {
         return <div className="grid_order">
             <text>{item.name}</text><text className='Text-in-order'>{item.price}</text>
             <button onClick={onClickDeleteOrder.bind(this, item._id)} >ลบ</button>
@@ -39,9 +46,10 @@ function List_order(){
         axios.delete("http://127.0.0.1:5000/order")
         .then((response) => {
             setMeat(response.data);
+            setSum(0)
         })
-        // console.log(meat)
-        console.log(check)
+        console.log(meat)
+        // console.log(check)
 
     }
 
@@ -52,11 +60,12 @@ function List_order(){
             console.log(check)
         })
         
-        axios.delete("http://127.0.0.1:5000/check")
-        .then((response) =>{
-            setCheck(response.data);
+        axios.get("http://127.0.0.1:5000/total/check")
+        .then((response) => {
+            setTotal(response.data);
+            console.log(total)
         })
-        console.log(check)
+        
     }
 
     return(
@@ -68,7 +77,7 @@ function List_order(){
 
             <h2>เมนูอาหาร</h2> <h2>ราคา</h2> <text></text>
         </div>
-        {show_meat}
+        {show_order}
         <text ></text><text></text>
         <text ></text><text></text>
         <text ></text><text></text>
@@ -77,6 +86,7 @@ function List_order(){
         </div>
         <button className = "button-order" onClick={onClickSubmit.bind()} >สั่งอาหาร</button>
         <button className = "button-pay" onClick={onClickPay.bind()} >ชำระเงิน</button>
+        {/* <button className = "button" onClick={onClickSum.bind()} >Sum</button> */}
         </>
     )
 }
