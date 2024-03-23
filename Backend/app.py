@@ -11,7 +11,7 @@ collection = db["meat"]
 
 order = []
 check = []
-sum = 0
+total = 0
 
 p_in_DB = collection.find()
 products=[]
@@ -107,6 +107,16 @@ def post_in_order(id):
         if(o["_id"] == id):
             order.append(o)
             check.append(o)
+            
+            # total = total + int(o["price"])
+            # print(total + price)
+            # total += price
+            print((type(o["price"])))
+            price = int(o["price"])
+            print(type(price))
+            print(type(total))
+            total = total + price
+            
             return jsonify(order),200
     return jsonify(order),404
 
@@ -133,11 +143,23 @@ def delete_check():
     check.clear()
     return jsonify(check),200
 
-@app.route("/sum", methods=["GET"])
-def get_sum():
+@app.route("/total/order", methods=["GET"])
+def get_total_order():
+    u = 0
     for i in order :
-        sum  = sum + i["price"]
-    return jsonify(sum),200
+        price = int(i["price"])
+        u  = u + price
+    print(total)
+    return jsonify(u),200
+
+@app.route("/total/check", methods=["GET"])
+def get_total():
+    u = 0
+    for i in check :
+        price = int(i["price"])
+        u  = u + price
+    print(total)
+    return jsonify(u),200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5000,debug=True)
