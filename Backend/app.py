@@ -9,6 +9,10 @@ client = MongoClient(uri)
 db = client["food_order"]
 collection = db["meat"]
 
+order = []
+check = []
+sum = 0
+
 p_in_DB = collection.find()
 products=[]
 for p in p_in_DB:
@@ -77,7 +81,7 @@ def update_product(id):
         "_id":{id},
         "name":data["name"],
         "price":data["price"],
-        "price":data["price"],
+        "image":data["image"],
     }
     for o in products:
         if(o["_id"] == id):
@@ -86,12 +90,54 @@ def update_product(id):
                 {"_id":o["_id"]},
                 {"$set":{   "name" : data["name"],
                             "price" : data["price"],
-                            "price":data["price"],
+                            "image":data["image"],
                         }
                 }
             )
             return jsonify(products),200
     return jsonify("Not found!!"),200
+
+@app.route("/order", methods=["GET"])
+def get_order():
+    return jsonify(order),200
+
+@app.route("/order/<int:id>", methods=["POST"])
+def post_in_order(id):
+    for o in products:
+        if(o["_id"] == id):
+            order.append(o)
+            check.append(o)
+            return jsonify(order),200
+    return jsonify(order),404
+
+@app.route("/order/<int:id>", methods=["DELETE"])
+def delete_in_order(id):
+    for o in order:
+        if(o["_id"] == id):
+            order.remove(o)
+            check.remove(o)
+            return jsonify(order),200
+    return jsonify(order),404
+
+@app.route("/order", methods=["DELETE"])
+def delete_all_order():
+    order.clear()
+    return jsonify(order),200
+
+@app.route("/check", methods=["GET"])
+def get_check():
+    return jsonify(check),200
+
+@app.route("/check", methods=["DELETE"])
+def delete_check():
+    check.clear()
+    return jsonify(check),200
+
+@app.route("/sum", methods=["GET"])
+def get_sum():
+    for i in order :
+        sum  = sum + i["price"]
+    return jsonify(sum),200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5000,debug=True)
