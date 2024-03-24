@@ -106,38 +106,28 @@ def post_in_order(id):
     for o in products:
         if(o["_id"] == id):
             order.append(o)
-            check.append(o)
-            
-            # total = total + int(o["price"])
-            # print(total + price)
-            # total += price
-            print((type(o["price"])))
-            price = int(o["price"])
-            print(type(price))
-            print(type(total))
-            total = total + price
-            
             return jsonify(order),200
     return jsonify(order),404
 
 @app.route("/order/<int:id>", methods=["DELETE"])
 def delete_in_order(id):
+    tmp = order
     for o in order:
         if(o["_id"] == id):
-            order.remove(o)
-            check.remove(o)
-            return jsonify(order),200
+            tmp.remove(o)
+            return jsonify(tmp),200
     return jsonify(order),404
 
 @app.route("/order", methods=["DELETE"])
 def delete_all_order():
+    for i in order :
+        check.append(i)
     order.clear()
     return jsonify(order),200
 
 @app.route("/check", methods=["GET"])
 def get_check():
     return jsonify(check),200
-
 
 @app.route("/check", methods=["DELETE"])
 def delete_check():
@@ -150,17 +140,15 @@ def get_total_order():
     for i in order :
         price = int(i["price"])
         u  = u + price
-    print(total)
     return jsonify(u),200
 
 @app.route("/total/check", methods=["GET"])
-def get_total():
+def get_total_check():
     u = 0
     for i in check :
         price = int(i["price"])
         u  = u + price
-    print(total)
     return jsonify(u),200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000,debug=True)
+    app.run(host="",port=5000,debug=True)
