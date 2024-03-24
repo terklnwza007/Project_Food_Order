@@ -1,10 +1,3 @@
-.App-background1{
-  text-align: center;
-  background-color: rgb(54, 34, 34);
-  height: 100%;
-  width: 100%;
-}
-
 .App-grid{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -12,6 +5,7 @@
   row-gap: 75px;
   margin-left: 200px;
   margin-right: 200px;
+  margin-top: 80px;
 }
 
 .App-image{
@@ -71,10 +65,37 @@
   font-weight: 400;
   font-style: normal;
 }
+.App-background1 {
+  position : fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #914b20dc;
+  z-index: -1;
+}
 
+.search-container {
+  margin-left: 200px;
+  margin-top: 20px; 
+}
+
+.search-input {
+  width: 300px;
+  height: 40px; 
+  font-size: 20px;
+  padding: 5px 10px;
+}
 .grid{
   display: grid;
-  background-color: gainsboro;
+  background-color: rgba(11, 1, 1, 0);
   grid-template-columns: 3fr 1fr;
   row-gap: 20px;
+}
+
+.popup1{
+  align-items: center; 
+  text-align: center;
+  justify-content: center;
+  margin-left: 40%;
 }

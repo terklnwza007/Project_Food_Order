@@ -5,15 +5,7 @@ import axios from "axios";
 function Meat(){
     const [buttonPopup, setButtonPopup] = useState(false);
     const [meat,setMeat]=useState([])
-    const onClickSelect=(id)=>{
-        // setButtonPopup(true)
-        axios.post("http://127.0.0.1:5000/order/" + id)
-        .then()
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            })
-        window.location.reload();
-    }
+    const [searchQuery, setSearchQuery] = useState('');
     
     useEffect(()=>{
         console.log("request to api")
@@ -23,19 +15,47 @@ function Meat(){
             console.error('Error fetching data:', error);
           })
     },[])
-    const show_meat = meat.map((item) => {
-        return (<div className="App-background-image">
-            <p key={item._id}></p>
-            <p className = "App-descript1">{item.name}<br/> {item.price} บาท</p>
-            <img className = "App-image" src= {item.image}/>
-            <br/>
-            <button onClick={onClickSelect.bind(this, item._id)} className = "App-descript2" >เพิ่มลงในตะกร้า</button>
-            {/* <button onClick={onClickSelect.bind(item._id, item.name, item.price)} className = "App-descript2" >เพิ่มลงในตะกร้า</button> */}
-            <Popup trigger = {buttonPopup} setTrigger = {setButtonPopup}></Popup>
+    const onClickSelect=(id)=>{
+        // setButtonPopup(true)
+        axios.post("http://127.0.0.1:5000/order/" + id)
+        .then()
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            })
+        window.location.reload();
+    }
+
+    const handlePopupClose = () => {
+        setButtonPopup(false);
+    };
+
+    const filteredMeat = meat.filter(item => {
+        // Filter based on search query, you can customize this logic as needed
+        return item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    const show_meat = filteredMeat.map(item => {
+        return (<div key={item._id} className="App-background-image">
+            <p className="App-descript1">{item.name}<br /> {item.price} บาท</p>
+            <img className="App-image" src={item.image} alt={item.name} />
+            <br />
+            <button onClick={() => onClickSelect(item._id)} className="App-descript2">เพิ่มลงในตะกร้า</button>
         </div>)
     })
-    return (<div className = "App-grid">
-        {show_meat}        
-    </div>);
+    return (
+        <div>
+            <div className="search-container">
+                <input
+                    type="text"
+                    placeholder="Search meat"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="search-input"
+                />
+            </div>
+            <div className="App-grid">
+                {show_meat}
+            </div>
+        </div>
+    );
 }
 export default Meat;

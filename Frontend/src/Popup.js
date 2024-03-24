@@ -1,22 +1,31 @@
 import React from 'react'
 import './Popup.css'
-
-function Popup(props){
+import { useState, useEffect } from 'react';
+import axios from "axios";
+function Popup(props){ 
+    const show_check = props.order.map(item => (
+        <div key={item._id} className='grid-in-check'>
+            <text className='text-nameMenu'>{item.name}</text><text>{item.price} บาท</text>
+            <br />
+        </div>
+    ))
     return (props.trigger) ? (
-    <div className="popup">
         <div className="popup-inner">
-            <p>เพิ่มลงในตะกร้าเรียบร้อย</p>
+            <p>ใบเสร็จ</p>
             <div className="setPosition-button">
-                
-                <button className="close-btn" onClick={() => props.setTrigger(false)}>
-                    เลือกสินค้าต่อไป
-                </button>
             </div>
-            
+            {show_check}
+            <div className='grid-in-check'>
+                <text className='text-nameMenu'>ยอดชำระ</text><text>{props.sum} บาท</text>
+            </div>
             {props.chidren}
+            {/* <p></p> */}
+            <br/>
+            <br/>
+            <button className="close-btn" onClick={() => props.setTrigger(false)}>
+                ชำระเงิน เสร็จแล้ว
+            </button>
         </div> 
-        
-    </div>
     ): "";
 }
 export default Popup;
