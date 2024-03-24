@@ -138,6 +138,7 @@ def delete_all_order():
 def get_check():
     return jsonify(check),200
 
+
 @app.route("/check", methods=["DELETE"])
 def delete_check():
     check.clear()
