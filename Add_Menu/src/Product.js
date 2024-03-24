@@ -41,37 +41,41 @@ export default function Product() {
     };
 
     const onDelete = (id) => {
-        axios.delete("http://127.0.0.1:5000/products/" + id)
-            .then(response => {
-                setProduct(response.data);
-                console.log(id);
-            });
+        const confirmDelete = window.confirm("Delete ID : " + id);
+        if (confirmDelete) {
+            axios.delete("http://127.0.0.1:5000/products/" + id)
+                .then(response => {
+                    setProduct(response.data);
+                    console.log(id);
+                });
+        }
     };
 
     const onUpdate = (id) => {
-        const newData = {
-            name: myInputRef1.current.value || product.find(item => item._id === id).name,
-            price: myInputRef2.current.value || product.find(item => item._id === id).price,
-            image: myInputRef3.current.value || product.find(item => item._id === id).image
-        };
-        const { name, price, image } = newData;
-    
-        if (name !== "" && price !== "" && image !== "") {
-            axios.put("http://127.0.0.1:5000/products/" + id, newData)
-                .then(response => {
-                    setProduct(response.data);
-                })
-                .catch(error => {
-                    console.error('Error updating product:', error);
-                });
-    
-            myInputRef1.current.value = "";
-            myInputRef2.current.value = "";
-            myInputRef3.current.value = "";
+        const confirmUpdate = window.confirm("Replace ID : " + id);
+        if (confirmUpdate) {
+            const newData = {
+                name: myInputRef1.current.value || product.find(item => item._id === id).name,
+                price: myInputRef2.current.value || product.find(item => item._id === id).price,
+                image: myInputRef3.current.value || product.find(item => item._id === id).image
+            };
+            const { name, price, image } = newData;
+        
+            if (name !== "" && price !== "" && image !== "") {
+                axios.put("http://127.0.0.1:5000/products/" + id, newData)
+                    .then(response => {
+                        setProduct(response.data);
+                    })
+                    .catch(error => {
+                        console.error('Error updating product:', error);
+                    });
+        
+                myInputRef1.current.value = "";
+                myInputRef2.current.value = "";
+                myInputRef3.current.value = "";
+            }
         }
     };
-    
-    
 
     const showProducts = product.map(item => (
         <tr key={item._id}>
@@ -104,8 +108,6 @@ export default function Product() {
                 </thead>
                 <tbody>{showProducts}</tbody>
             </table>
-            
-            
         </div>
     );
 }
